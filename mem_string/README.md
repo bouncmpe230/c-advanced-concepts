@@ -14,6 +14,15 @@ This problem session covers:
 - Enables resizable data structures like linked lists and dynamic arrays.
 
 ### **1.2 Functions for Dynamic Memory**
+
+Function prototypes: 
+```c
+void *malloc(size_t size);
+void *calloc(size_t nmemb, size_t size);
+void *realloc(void *ptr, size_t size);
+void free(void *ptr);
+``
+
 ```c
 #include <stdio.h>
 #include <stdlib.h>
