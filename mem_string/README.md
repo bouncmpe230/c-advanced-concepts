@@ -66,6 +66,50 @@ ptr = (int *)realloc(ptr, 6 * sizeof(int));
 - `realloc` resizes a previously allocated memory block.
 - Ensure to check if `realloc` returns `NULL`.
 
+### **1.5 Memory Leaks and Prevention**
+A **memory leak** occurs when dynamically allocated memory is not properly freed, leading to increased memory usage and potential program crashes. This is especially problematic in long-running programs.
+
+```c
+// Example of a memory leak
+#include <stdlib.h>
+
+void memory_leak_example() {
+    int *ptr = (int *)malloc(10 * sizeof(int)); // Allocating memory
+    if (!ptr) return;
+
+    ptr = (int *)malloc(20 * sizeof(int)); // Allocating new memory without freeing the old one
+    // The original 10-element block is now lost (leaked)
+
+    free(ptr); // Only freeing the second allocation
+}
+```
+
+#### How to Prevent Memory Leaks
+- Always free dynamically allocated memory
+```c
+int *ptr = (int *)malloc(10 * sizeof(int));
+if (ptr) {
+    // Use the memory
+    free(ptr); // Free when done
+}
+```
+- Use a temporary pointer with realloc
+
+```c
+int *ptr = (int *)malloc(10 * sizeof(int));
+int *temp = realloc(ptr, 20 * sizeof(int));
+if (temp) {
+    ptr = temp; // Assign only if successful
+} else {
+    free(ptr); // Free old memory if realloc fails
+}
+```
+- Use memory debugging tools
+  - Valgrind (Linux/macOS)
+  ```bash 
+  valgrind --leak-check=full ./your_program
+  ```
+  - AddressSanitizer (GCC/Clang): Compile with `-fsanitize=address` to detect leaks.
 
 ## 2. String Handling in C
 ### **2.1 String Function Prototypes**
