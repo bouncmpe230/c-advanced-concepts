@@ -131,6 +131,9 @@ char *strstr(const char *haystack, const char *needle);
 // strcspn: Finding first occurrence of a character from a set
 size_t strcspn(const char *str, const char *search);
 size_t strlen(const char *str);
+// strdup: Duplicate a string
+char * strdup(const char *str1);
+char * strndup(const char *str1, size_t num);
 ```
 
 The `const` keyword in C is used to declare variables whose values cannot be changed after initialization. It helps enforce immutability, improve code safety, and prevent accidental modifications.
@@ -188,12 +191,100 @@ int main() {
 
     // strlen: Getting string length
     printf("Length of str1: %lu\n", strlen(str1));
+    
+    // strdup and strndup: Duplicating strings
+    char *dup = strdup(str1);
+    if (dup != NULL) {
+        printf("Duplicated string (using strdup): %s\n", dup);
+        free(dup);
+    }
+    char *dup2 = strndup("Another string", 8);
+    if (dup2 != NULL) {
+        printf("Partially duplicated (using strndup): %s\n", dup2);
+        free(dup2);
+    }
+    return 0;
+}
+```
+### 2.4  String Storage Types & Operations
+In C, strings can be stored in several ways. Below are examples illustrating the differences between string literals, static character arrays, and dynamically allocated arrays, along with common operations.
+#### 2.3.1 String Literals
+* Definition: A string literal is stored in read-only memory.
+* Usage: You can read from them using string functions (e.g., strlen, strstr), but you must not modify them.
+```c
+#include <stdio.h>
+#include <string.h>
 
+int main() {
+    // String literal (read-only)
+    char *strLiteral = "Hello, World!";
+    printf("String literal: %s\n", strLiteral);
+    printf("Length of string literal: %zu\n\n", strlen(strLiteral));
+
+    // Attempting to modify strLiteral (e.g., strLiteral[0] = 'h') is undefined behavior.
     return 0;
 }
 ```
 
-### **2.4 Splitting a String with `strtok`**
+#### 2.3.2 Static Character Arrays
+* Definition: A fixed-size array defined at compile time and stored on the stack.
+* Usage: Modifiable (if not declared const), and you can safely use functions like strcpy, strcat, and strncpy.
+```c
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    // Static array (modifiable)
+    char staticStr[50] = "Hello";
+    printf("Initial static array: %s\n", staticStr);
+
+    // Using strcpy to copy a new string
+    strcpy(staticStr, "Modified static string");
+    printf("After strcpy: %s\n", staticStr);
+
+    // Using strcat to append text
+    strcat(staticStr, " with strcat");
+    printf("After strcat: %s\n", staticStr);
+    
+    return 0;
+}
+```
+### 2.3.3 Dynamically Allocated Arrays
+* Definition: Arrays allocated at runtime using functions like malloc (or calloc), and their size can be determined during execution.
+* Usage: Remember to free the allocated memory to avoid leaks. String functions work just as on static arrays.
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main() {
+    // Dynamically allocated array
+    char *dynamicStr = (char *)malloc(50 * sizeof(char));
+    if (dynamicStr == NULL) {
+        printf("Memory allocation failed!\n");
+        return 1;
+    }
+    
+    // Initialize and manipulate the dynamic string
+    strcpy(dynamicStr, "Dynamic string");
+    strcat(dynamicStr, " with strcat");
+    printf("Dynamic array after strcat: %s\n", dynamicStr);
+
+    // Duplicate the dynamic string using strdup
+    char *dupStr = strdup(dynamicStr);
+    if (dupStr != NULL) {
+        printf("Duplicated dynamic string: %s\n", dupStr);
+        free(dupStr);
+    }
+
+
+    free(dynamicStr);
+    return 0;
+}
+```
+
+### **2.5 Splitting a String with `strtok`**
 ```c
 char input[] = "Coldplay - Yellow";
 char *artist = strtok(input, "-");
