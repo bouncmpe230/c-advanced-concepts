@@ -2,6 +2,9 @@
 #include <string.h>
 #include <ctype.h>
 
+/*
+strtok alters the original string by inserting null characters. 
+*/
 int main() {
    char str[100], new_str[100];
    char original[100];
