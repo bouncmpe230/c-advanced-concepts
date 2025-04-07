@@ -24,11 +24,9 @@ Closes the file.
 fclose(fp);
 ```
 
----
 
 ## Character/Formatted Read/Write
 
----
 
 ### `fgets()`
 Reads a string (line) from a file, including newline.
@@ -41,7 +39,7 @@ printf("Line: %s", line);
 fclose(fp);
 ```
 
----
+
 
 ### `fputs()`
 Writes a string to a file (without adding newline).
@@ -52,7 +50,6 @@ fputs("Hello, file!\n", fp);  // Writes string
 fclose(fp);
 ```
 
----
 
 ### `fscanf()`
 Reads formatted input from a file, similar to `scanf`.
@@ -66,7 +63,6 @@ printf("Name: %s, Age: %d\n", name, age);
 fclose(fp);
 ```
 
----
 
 ### `fprintf()`
 Writes formatted output to a file, similar to `printf`.
@@ -77,7 +73,7 @@ fprintf(fp, "Name: %s, Age: %d\n", "Alice", 25);
 fclose(fp);
 ```
 
----
+
 
 ### `gets()` *(Deprecated – use `fgets()` instead!)*
 Reads a string from stdin, but it's **unsafe**. Shown here just for completeness.
@@ -88,7 +84,7 @@ gets(name);  // ⚠️ Unsafe: may cause buffer overflow
 printf("You entered: %s\n", name);
 ```
 
----
+
 
 ### `puts()`
 Writes a string to stdout with a newline.
@@ -97,11 +93,11 @@ Writes a string to stdout with a newline.
 puts("Hello, world!");  // Equivalent to printf("Hello, world!\n");
 ```
 
----
+
 
 ## Binary Read/Write
 
----
+
 
 ### `fread()`
 Reads binary data into memory.
@@ -119,7 +115,7 @@ printf("ID: %d, Score: %.2f\n", r.id, r.score);
 fclose(fp);
 ```
 
----
+
 
 ### `fwrite()`
 Writes binary data from memory to a file.
@@ -131,7 +127,7 @@ fwrite(&r, sizeof(Record), 1, fp);  // Write one record
 fclose(fp);
 ```
 
----
+
 
 ### `fseek()`
 Moves the file pointer to a specific byte.
@@ -144,7 +140,7 @@ printf("Char at position 6: %c\n", ch);
 fclose(fp);
 ```
 
----
+
 
 ### `rewind()`
 Moves the file pointer back to the beginning.
@@ -158,7 +154,7 @@ printf("First char: %c\n", ch);
 fclose(fp);
 ```
 
----
+
 
 ## Example
 
