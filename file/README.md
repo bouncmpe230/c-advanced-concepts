@@ -1,15 +1,19 @@
 # File Input / Output in C
 
-C provides a standard library of functions for handling file input and output. 
-
+C provides a standard library of functions for handling file input and output.  
 File I/O can be done in **text mode** or **binary mode** depending on the file's content.
 
+---
 
 ## Open / Close Files
 
-### `fopen()`
-Opens a file with a specified mode (`"r"`, `"w"`, `"a"`, `"rb"`, etc.).
+### `FILE *fopen(const char *filename, const char *mode);`
 
+**Parameters:**
+- `filename`: Name/path of the file to open.
+- `mode`: String representing the file access mode (`"r"`, `"w"`, `"a"`, `"rb"`, etc.).
+
+**Example:**
 ```c
 FILE *fp = fopen("example.txt", "w");  // Open for writing
 if (fp == NULL) {
@@ -17,20 +21,30 @@ if (fp == NULL) {
 }
 ```
 
-### `fclose()`
-Closes the file.
+---
 
+### `int fclose(FILE *stream);`
+
+**Parameters:**
+- `stream`: Pointer to the file object to be closed.
+
+**Example:**
 ```c
 fclose(fp);
 ```
 
+---
 
 ## Character/Formatted Read/Write
 
+### `char *fgets(char *str, int n, FILE *stream);`
 
-### `fgets()`
-Reads a string (line) from a file, including newline.
+**Parameters:**
+- `str`: Buffer to store the read string.
+- `n`: Maximum number of characters to read (including `\0`).
+- `stream`: File pointer to read from.
 
+**Example:**
 ```c
 char line[100];
 FILE *fp = fopen("example.txt", "r");
@@ -39,126 +53,138 @@ printf("Line: %s", line);
 fclose(fp);
 ```
 
+---
 
+### `int fputs(const char *str, FILE *stream);`
 
-### `fputs()`
-Writes a string to a file (without adding newline).
+**Parameters:**
+- `str`: The string to write.
+- `stream`: File pointer to write to.
 
+**Example:**
 ```c
 FILE *fp = fopen("example.txt", "w");
-fputs("Hello, file!\n", fp);  // Writes string
+fputs("Hello, file!\n", fp);
 fclose(fp);
 ```
 
+---
 
-### `fscanf()`
-Reads formatted input from a file, similar to `scanf`.
+### `int fscanf(FILE *stream, const char *format, ...);`
 
+**Parameters:**
+- `stream`: File pointer to read from.
+- `format`: Format specifiers (like in `scanf`).
+- `...`: Pointers to variables to store the read values.
+
+**Example:**
 ```c
 int age;
 char name[50];
 FILE *fp = fopen("example.txt", "r");
-fscanf(fp, "%s %d", name, &age);  // e.g., "Alice 25"
-printf("Name: %s, Age: %d\n", name, age);
+fscanf(fp, "%s %d", name, &age);
 fclose(fp);
 ```
 
+---
 
-### `fprintf()`
-Writes formatted output to a file, similar to `printf`.
+### `int fprintf(FILE *stream, const char *format, ...);`
 
+**Parameters:**
+- `stream`: File pointer to write to.
+- `format`: Format string (like in `printf`).
+- `...`: Values to write.
+
+**Example:**
 ```c
 FILE *fp = fopen("example.txt", "w");
 fprintf(fp, "Name: %s, Age: %d\n", "Alice", 25);
 fclose(fp);
 ```
 
+---
 
+### `char *gets(char *str);` *(Deprecated – use `fgets()` instead!)*
 
-### `gets()` *(Deprecated – use `fgets()` instead!)*
-Reads a string from stdin, but it's **unsafe**. Shown here just for completeness.
+**Parameters:**
+- `str`: Buffer to store input.
 
+⚠️ Dangerous — does not check buffer length.
+
+---
+
+### `int puts(const char *str);`
+
+**Parameters:**
+- `str`: String to be written to stdout.
+
+**Example:**
 ```c
-char name[50];
-gets(name);  // ⚠️ Unsafe: may cause buffer overflow
-printf("You entered: %s\n", name);
+puts("Hello, world!");
 ```
 
-
-
-### `puts()`
-Writes a string to stdout with a newline.
-
-```c
-puts("Hello, world!");  // Equivalent to printf("Hello, world!\n");
-```
-
-
+---
 
 ## Binary Read/Write
 
+### `size_t fread(void *ptr, size_t size, size_t count, FILE *stream);`
 
+**Parameters:**
+- `ptr`: Pointer to the memory block to store read data.
+- `size`: Size (in bytes) of each element.
+- `count`: Number of elements to read.
+- `stream`: File pointer.
 
-### `fread()`
-Reads binary data into memory.
-
+**Example:**
 ```c
-typedef struct {
-    int id;
-    float score;
-} Record;
-
-FILE *fp = fopen("data.bin", "rb");
 Record r;
-fread(&r, sizeof(Record), 1, fp);  // Read one record
-printf("ID: %d, Score: %.2f\n", r.id, r.score);
-fclose(fp);
+fread(&r, sizeof(Record), 1, fp);
 ```
 
+---
 
+### `size_t fwrite(const void *ptr, size_t size, size_t count, FILE *stream);`
 
-### `fwrite()`
-Writes binary data from memory to a file.
+**Parameters:**
+- `ptr`: Pointer to the data to be written.
+- `size`: Size of each element.
+- `count`: Number of elements to write.
+- `stream`: File pointer.
 
+**Example:**
 ```c
-Record r = {1, 98.5};
-FILE *fp = fopen("data.bin", "wb");
-fwrite(&r, sizeof(Record), 1, fp);  // Write one record
-fclose(fp);
+fwrite(&r, sizeof(Record), 1, fp);
 ```
 
+---
 
+### `int fseek(FILE *stream, long offset, int origin);`
 
-### `fseek()`
-Moves the file pointer to a specific byte.
+**Parameters:**
+- `stream`: File pointer.
+- `offset`: Number of bytes to move the pointer.
+- `origin`: Position to offset from (`SEEK_SET`, `SEEK_CUR`, `SEEK_END`).
 
+**Example:**
 ```c
-FILE *fp = fopen("example.txt", "r");
-fseek(fp, 5, SEEK_SET);  // Move to the 6th byte
-char ch = fgetc(fp);
-printf("Char at position 6: %c\n", ch);
-fclose(fp);
+fseek(fp, 5, SEEK_SET);  // Go to 6th byte
 ```
 
+---
 
+### `void rewind(FILE *stream);`
 
-### `rewind()`
-Moves the file pointer back to the beginning.
+**Parameters:**
+- `stream`: File pointer.
 
+**Example:**
 ```c
-FILE *fp = fopen("example.txt", "r");
-fseek(fp, 10, SEEK_SET);  // Move forward
-rewind(fp);               // Go back to start
-char ch = fgetc(fp);
-printf("First char: %c\n", ch);
-fclose(fp);
+rewind(fp);  // Move to beginning of file
 ```
 
+---
 
-
-## Example
-
-Here's a combined mini project demonstrating both **text** and **binary** file operations:
+## Example Project: Text + Binary File Operations
 
 ```c
 #include <stdio.h>
@@ -204,8 +230,10 @@ int main() {
 }
 ```
 
-## Final Notes:
-- Always check file pointers for `NULL` to handle errors.
-- Prefer `fgets()` over `gets()`.
-- Use `"b"` in mode strings (`"rb"`, `"wb"`) for binary files.
+---
 
+## Final Notes
+- Always check file pointers (`if (fp == NULL)`) to prevent crashes.
+- Avoid using `gets()` — prefer `fgets()` for safety.
+- Add `"b"` in mode strings for binary files (`"rb"`, `"wb"`).
+- Use `fseek()`/`rewind()` to control read/write position.
