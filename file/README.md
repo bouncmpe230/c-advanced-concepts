@@ -165,6 +165,13 @@ fwrite(&r, sizeof(Record), 1, fp);
 - `offset`: Number of bytes to move the pointer.
 - `origin`: Position to offset from (`SEEK_SET`, `SEEK_CUR`, `SEEK_END`).
 
+
+`SEEK_SET` – It moves file pointer position to the beginning of the file.
+
+`SEEK_CUR` – It moves file pointer position to given location.
+
+`SEEK_END` – It moves file pointer position to the end of file.
+
 **Example:**
 ```c
 fseek(fp, 5, SEEK_SET);  // Go to 6th byte
